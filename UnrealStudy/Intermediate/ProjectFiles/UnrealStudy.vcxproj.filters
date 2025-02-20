@@ -11,6 +11,7 @@
     <None Include="..\..\Source\UnrealStudyEditor.Target.cs">
       <Filter>Source</Filter>
     </None>
+    <None Include="..\..\.vsconfig" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -37,6 +38,24 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\UnrealStudy\UnrealStudy.h">
       <Filter>Source\UnrealStudy</Filter>
+    </ClInclude>
+    <Filter Include="Source\UnrealStudy\Private">
+      <UniqueIdentifier>{D13347E7-62CA-3D0A-A5B7-C72976B9C1F6}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyTutoActor.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyTutoPawn.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
+    <Filter Include="Source\UnrealStudy\Public">
+      <UniqueIdentifier>{0989A769-3405-34B6-B854-D16F381EF938}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyTutoActor.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyTutoPawn.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
