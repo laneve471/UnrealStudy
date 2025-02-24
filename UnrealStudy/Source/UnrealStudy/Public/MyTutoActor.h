@@ -26,9 +26,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 // actor가 월드에 존재하려면
-// 1. transform(4x4 행렬) -> 존재 자체
-// 2. mesh 필요 -> 눈에 보임
-// 3. material 필요 -> 색을 칠함
+// 1. mesh
+// 2. material
+// 3. transform(4x4 행렬)
 
 private:
 	UPROPERTY()

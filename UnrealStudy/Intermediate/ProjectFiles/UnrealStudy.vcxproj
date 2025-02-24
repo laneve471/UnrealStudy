@@ -262,12 +262,20 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\UnrealStudy\UnrealStudy.h"/>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyGameModeBase.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyPlayerController.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyTutoActor.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyTutoPawn.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyGameModeBase.h"/>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayerController.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyTutoActor.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyTutoPawn.h"/>
   </ItemGroup>

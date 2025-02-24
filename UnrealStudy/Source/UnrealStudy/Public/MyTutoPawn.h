@@ -6,6 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "MyTutoPawn.generated.h"
 
+class UInputAction;
+struct FInputActionValue;
+
 UCLASS()
 class UNREALSTUDY_API AMyTutoPawn : public APawn
 {
@@ -26,10 +29,23 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Unreal의 고유 클래스들은 Uobject를 상속받아서 만들어진다.
+	// 모든 블루프린트는 C++ 클래스를 상속받아 만들어진다.
+	UFUNCTION(BlueprintCallable)
+	void Temp();
+
+	void Move(const FInputActionValue& value);
+
 private:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	UStaticMeshComponent* _mesh;
 
+	UPROPERTY(EditAnywhere, Category = "Speed")
 	float _moveSpeed = 100.0f;
+	UPROPERTY(EditAnywhere, Category = "Speed")
 	float _rotSpeed = 30.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* _moveAction;
+
 };
