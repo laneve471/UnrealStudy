@@ -12,6 +12,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
+#include "MyAnimInstance.h"
+
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
@@ -37,6 +39,16 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	_animInstance = Cast<UMyAnimInstance>(GetMesh()->GetAnimInstance());
+	if (_animInstance == nullptr)
+		UE_LOG(LogTemp, Error, TEXT("AnimInstance did not exist."));
+
+	// Delegate 바인딩 연습
+	_animInstance->_attackStart.BindUObject(this, &AMyCharacter::TestDelegate);
+	_animInstance->_attackStart2.BindUObject(this, &AMyCharacter::TestDelegate2);
+	_animInstance->_attackStart3.AddDynamic(this, &AMyCharacter::TestDelegate);
+
+	_animInstance->OnMontageEnded.AddDynamic(this, &AMyCharacter::AttackEnd);
 }
 
 // Called every frame
@@ -56,12 +68,15 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		enhancedInputComponent->BindAction(_moveAction, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
 		enhancedInputComponent->BindAction(_lookAction, ETriggerEvent::Triggered, this, &AMyCharacter::Look);
-		enhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::Jump);
+		enhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::JumpA);
+		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &AMyCharacter::Attack);
 	}
 }
 
 void AMyCharacter::Move(const FInputActionValue& value)
 {
+	if (_isAttack) return;
+
 	FVector2D moveVector = value.Get<FVector2D>();
 
 	if (Controller != nullptr)
@@ -87,3 +102,44 @@ void AMyCharacter::Look(const FInputActionValue& value)
 	}
 }
 
+void AMyCharacter::JumpA(const FInputActionValue& value)
+{
+	if (_isAttack) return;
+
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		ACharacter::Jump();
+	}
+}
+
+void AMyCharacter::Attack(const FInputActionValue& value)
+{
+	if (_isAttack) return;
+
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		_isAttack = true;
+		_animInstance->PlayAnimMontage();
+	}
+}
+
+void AMyCharacter::TestDelegate()
+{
+	UE_LOG(LogTemp, Log, TEXT("Attack Start Delegate Test"));
+}
+
+int32 AMyCharacter::TestDelegate2(int32 a, int32 b)
+{
+	UE_LOG(LogTemp, Log, TEXT("Speed : %d, IsFalling : %d"), a, b);
+
+	return -1;
+}
+
+void AMyCharacter::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
+{
+	_isAttack = false;
+}

@@ -3,11 +3,12 @@
 
 #include "MyGameModeBase.h"
 #include "MyTutoPawn.h"
+#include "MyCharacter.h"
 
 AMyGameModeBase::AMyGameModeBase()
 {
 	// BluePrint Class Type을 가져올 때 _C를 붙여야 한다.
-	static ConstructorHelpers::FClassFinder<AMyTutoPawn>
+	static ConstructorHelpers::FClassFinder<AMyCharacter>
 		pawn(TEXT("/Script/Engine.Blueprint'/Game/BluePrints/BP_MyCharacter.BP_MyCharacter_C'"));
 
 	if (pawn.Succeeded())

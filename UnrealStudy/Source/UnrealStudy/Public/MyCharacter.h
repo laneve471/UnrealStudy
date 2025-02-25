@@ -26,8 +26,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
 	void Move(const struct FInputActionValue& value);
+	UFUNCTION()
 	void Look(const struct FInputActionValue& value);
+	UFUNCTION()
+	void JumpA(const struct FInputActionValue& value);
+	UFUNCTION()
+	void Attack(const struct FInputActionValue& value);
+
+	UFUNCTION()
+	void TestDelegate();
+	UFUNCTION()
+	int32 TestDelegate2(int32 a, int32 b);
+
+	UFUNCTION()
+	void AttackEnd(class UAnimMontage* Montage, bool bInterrupted);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
@@ -38,6 +52,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	class UInputAction* _jumpAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	class UInputAction* _attackAction;
 
 	// 언리얼의 핵심 구조
 	// 1. 상속
@@ -54,12 +71,24 @@ private:
 	//		- 눈에 보이는 무언가 (카메라, 광원, 모델)
 	//		- 다른 컴포넌트에 붙을 수 있음 (부모가 움직이면 자식도 움직임)
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* _camera; // 액터에만 붙을 수 있음
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* _springArm;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	float _speed = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	bool _isAttack;
+
+	UPROPERTY()
+	class UMyAnimInstance* _animInstance;
 };
+
+// 액터 : mesh, material, transform
+// 폰 : input controller, movement 추가
+// 캐릭터 : skeletal mesh, capsule, anim 추가
+
+// 클래스는 객체가 아님
