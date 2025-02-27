@@ -14,7 +14,7 @@ AMyTutoPawn::AMyTutoPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh")); // 동적 할당?
+	_mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = _mesh;
 
 	// 생성자에서만 호출
@@ -75,7 +75,7 @@ void AMyTutoPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// 입력
-	// - Action : 콜백함수를 세팅(시그니처를 맞춰서)
+	// - BindAction : 콜백함수를 세팅(시그니처를 맞춰서)
 	// - MappingContext
 	
 	// pawn : moveAction

@@ -43,6 +43,12 @@ public:
 	UFUNCTION()
 	void AttackEnd(class UAnimMontage* Montage, bool bInterrupted);
 
+	UFUNCTION()
+	void Attack_Hit();
+
+	float My_Vertical() { return _vertical; }
+	float My_Horizontal() { return _horizontal; }
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	class UInputAction* _moveAction;
@@ -85,6 +91,11 @@ private:
 
 	UPROPERTY()
 	class UMyAnimInstance* _animInstance;
+
+	int32 _curAttackSection = 0;
+
+	float _vertical = 0.0f;
+	float _horizontal = 0.0f;
 };
 
 // ╬вем : mesh, material, transform

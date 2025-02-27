@@ -82,4 +82,7 @@
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Study.txt" />
+  </ItemGroup>
 </Project>

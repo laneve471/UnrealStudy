@@ -21,6 +21,8 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		_speed = character->GetVelocity().Size();
 		// UE_LOG(LogTemp, Error, TEXT("Speed : %f"), _speed);
 		_isFalling = character->GetMovementComponent()->IsFalling();
+		_vertical = character->My_Vertical();
+		_horizontal = character->My_Horizontal();
 	}
 }
 
@@ -37,4 +39,16 @@ void UMyAnimInstance::PlayAnimMontage()
 		//_attackStart3.Broadcast(); // 멀티캐스트
 		Montage_Play(_animMontage);
 	}
+}
+
+void UMyAnimInstance::AnimNotify_Attack_Hit()
+{
+	_hitEvent.Broadcast();
+}
+
+void UMyAnimInstance::JumpToSection(int32 sectionIndex)
+{
+	// Section1, Section2, Section3
+	FName sectionName = FName(*FString::Printf(TEXT("Section%d"), sectionIndex));
+	Montage_JumpToSection(sectionName);
 }

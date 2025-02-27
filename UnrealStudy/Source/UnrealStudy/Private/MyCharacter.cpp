@@ -49,6 +49,9 @@ void AMyCharacter::BeginPlay()
 	_animInstance->_attackStart3.AddDynamic(this, &AMyCharacter::TestDelegate);
 
 	_animInstance->OnMontageEnded.AddDynamic(this, &AMyCharacter::AttackEnd);
+	_animInstance->_hitEvent.AddDynamic(this, &AMyCharacter::Attack_Hit);
+
+	Rename(TEXT("Sparrow"));
 }
 
 // Called every frame
@@ -85,6 +88,9 @@ void AMyCharacter::Move(const FInputActionValue& value)
 		{
 			FVector forward = GetActorForwardVector();
 			FVector right = GetActorRightVector();
+
+			_vertical = moveVector.Y;
+			_horizontal = moveVector.X;
 
 			AddMovementInput(forward, moveVector.Y * _speed);
 			AddMovementInput(right, moveVector.X * _speed);
@@ -123,7 +129,10 @@ void AMyCharacter::Attack(const FInputActionValue& value)
 	if (isPress)
 	{
 		_isAttack = true;
+
+		_curAttackSection = (_curAttackSection + 1) % 3;
 		_animInstance->PlayAnimMontage();
+		_animInstance->JumpToSection(_curAttackSection + 1);
 	}
 }
 
@@ -142,4 +151,35 @@ int32 AMyCharacter::TestDelegate2(int32 a, int32 b)
 void AMyCharacter::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	_isAttack = false;
+}
+
+void AMyCharacter::Attack_Hit()
+{
+	FHitResult hitResult;
+	FCollisionQueryParams params(NAME_None, false, this);
+
+	float attackRange = 500.0f;
+	float attackRadius = 100.0f;
+	FQuat Rotation = FQuat(GetActorRightVector(), FMath::DegreesToRadians(90));
+
+	bool bResult = GetWorld()->SweepSingleByChannel
+	(
+		OUT hitResult,
+		GetActorLocation() + GetActorForwardVector() * attackRange * 0.5f,
+		GetActorLocation() + GetActorForwardVector() * attackRange * 0.5f,
+		Rotation,
+		ECC_GameTraceChannel2,
+		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
+		params
+	);
+
+	FColor drawColor = FColor::Green;
+
+	if (bResult && hitResult.GetActor()->IsValidLowLevel())
+	{
+		drawColor = FColor::Red;
+	}
+
+	DrawDebugCapsule(GetWorld(), GetActorLocation() + GetActorForwardVector() * attackRange * 0.5f,
+		attackRange * 0.5f, attackRadius, Rotation, drawColor, false, 1.0f);
 }
