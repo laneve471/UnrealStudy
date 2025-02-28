@@ -9,10 +9,16 @@
 #include "InputActionValue.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
 #include "MyAnimInstance.h"
+#include "MyStatComponent.h"
+#include "MyItem.h"
+#include "MyHpBar.h"
+
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -32,6 +38,17 @@ AMyCharacter::AMyCharacter()
 
 	_springArm->TargetArmLength = 500.0f;
 	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
+
+	_statComponent = CreateDefaultSubobject<UMyStatComponent>(TEXT("Stat"));
+	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
+	_hpBarWidget->SetupAttachment(GetMesh());
+	_hpBarWidget->SetWidgetSpace(EWidgetSpace::World);
+	
+	static ConstructorHelpers::FClassFinder<UMyHpBar> hpBarClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/BluePrints/BP_MyHpBar.BP_MyHpBar_C'"));
+	if (hpBarClass.Succeeded())
+	{
+		_hpBarWidget->SetWidgetClass(hpBarClass.Class);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -51,7 +68,12 @@ void AMyCharacter::BeginPlay()
 	_animInstance->OnMontageEnded.AddDynamic(this, &AMyCharacter::AttackEnd);
 	_animInstance->_hitEvent.AddDynamic(this, &AMyCharacter::Attack_Hit);
 
-	Rename(TEXT("Sparrow"));
+	// HpBar...ProgressBar...Percent 변경될 때 호출되는 함수
+	auto hpBar = Cast<UMyHpBar>(_hpBarWidget->GetWidget());
+	if (hpBar)
+	{
+		_statComponent->_hpChanged.AddUObject(hpBar, &UMyHpBar::SetHpBarValue);
+	}
 }
 
 // Called every frame
@@ -59,6 +81,15 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	auto playerCameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+
+	if (playerCameraManager)
+	{
+		FVector hpBarLocation = _hpBarWidget->GetComponentLocation();
+		FVector cameraLocation = playerCameraManager->GetCameraLocation();
+		FRotator rot = UKismetMathLibrary::FindLookAtRotation(hpBarLocation, cameraLocation);
+		_hpBarWidget->SetWorldRotation(rot);
+	}
 }
 
 // Called to bind functionality to input
@@ -92,8 +123,8 @@ void AMyCharacter::Move(const FInputActionValue& value)
 			_vertical = moveVector.Y;
 			_horizontal = moveVector.X;
 
-			AddMovementInput(forward, moveVector.Y * _speed);
-			AddMovementInput(right, moveVector.X * _speed);
+			AddMovementInput(forward, moveVector.Y * _statComponent->GetSpeed());
+			AddMovementInput(right, moveVector.X * _statComponent->GetSpeed());
 		}
 	}
 }
@@ -105,6 +136,7 @@ void AMyCharacter::Look(const FInputActionValue& value)
 	if (Controller != nullptr)
 	{
 		AddControllerYawInput(lookAxisVector.X);
+		AddControllerPitchInput(-lookAxisVector.Y);
 	}
 }
 
@@ -136,6 +168,7 @@ void AMyCharacter::Attack(const FInputActionValue& value)
 	}
 }
 
+
 void AMyCharacter::TestDelegate()
 {
 	UE_LOG(LogTemp, Log, TEXT("Attack Start Delegate Test"));
@@ -160,14 +193,21 @@ void AMyCharacter::Attack_Hit()
 
 	float attackRange = 500.0f;
 	float attackRadius = 100.0f;
-	FQuat Rotation = FQuat(GetActorRightVector(), FMath::DegreesToRadians(90));
+	//FQuat quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(90));
+
+	FVector forward = GetActorForwardVector();
+	FQuat quat = FQuat::FindBetweenVectors(FVector(0, 0, 1), forward);
+
+	FVector center = GetActorLocation() + forward * attackRange * 0.5f;
+	FVector start = GetActorLocation();  // 충돌체의 중심 start
+	FVector end = GetActorLocation() + forward * attackRange; // 충돌체의 중심 end
 
 	bool bResult = GetWorld()->SweepSingleByChannel
-	(
+	( // Sweep : start부터 end까지 물고 가는 형태의 충돌 판정
 		OUT hitResult,
-		GetActorLocation() + GetActorForwardVector() * attackRange * 0.5f,
-		GetActorLocation() + GetActorForwardVector() * attackRange * 0.5f,
-		Rotation,
+		center,
+		center,
+		quat,
 		ECC_GameTraceChannel2,
 		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
 		params
@@ -178,8 +218,33 @@ void AMyCharacter::Attack_Hit()
 	if (bResult && hitResult.GetActor()->IsValidLowLevel())
 	{
 		drawColor = FColor::Red;
+		AMyCharacter* victim = Cast<AMyCharacter>(hitResult.GetActor());
+
+		if (victim)
+		{
+			FDamageEvent damageEvent = FDamageEvent();
+
+			victim->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
+		}
 	}
 
-	DrawDebugCapsule(GetWorld(), GetActorLocation() + GetActorForwardVector() * attackRange * 0.5f,
-		attackRange * 0.5f, attackRadius, Rotation, drawColor, false, 1.0f);
+	DrawDebugCapsule(GetWorld(), center,
+		attackRange * 0.5f, attackRadius, quat, drawColor, false, 1.0f);
+}
+
+void AMyCharacter::AddHp(float Amount)
+{
+	_statComponent->AddCurHp(Amount);
+}
+
+void AMyCharacter::SubtractHp(float Amount)
+{
+	_statComponent->AddCurHp(-Amount);
+}
+
+float AMyCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	_statComponent->AddCurHp(-Damage);
+
+	return Damage;
 }

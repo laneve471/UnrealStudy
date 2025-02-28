@@ -46,6 +46,12 @@ public:
 	UFUNCTION()
 	void Attack_Hit();
 
+	void AddHp(float Amount);
+	void SubtractHp(float Amount);
+
+	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	// 실제 나에게 적용된 데미지 반환
+
 	float My_Vertical() { return _vertical; }
 	float My_Horizontal() { return _horizontal; }
 
@@ -83,14 +89,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* _springArm;
 
+	UPROPERTY()
+	class UMyAnimInstance* _animInstance;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
-	float _speed = 10.0f;
+	class UMyStatComponent* _statComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* _hpBarWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	bool _isAttack;
-
-	UPROPERTY()
-	class UMyAnimInstance* _animInstance;
 
 	int32 _curAttackSection = 0;
 
