@@ -48,6 +48,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyCharacter.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyEnemy.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyGameInstance.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
@@ -57,7 +60,13 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyHpBar.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyInvenUI.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyItem.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyPlayer.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyPlayerController.cpp">
@@ -81,6 +90,9 @@
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyCharacter.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEnemy.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyGameInstance.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
@@ -90,7 +102,13 @@
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyHpBar.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyInvenUI.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyItem.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayer.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayerController.h">

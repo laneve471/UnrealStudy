@@ -24,6 +24,7 @@ DECLARE_DELEGATE_RetVal_TwoParams(int32, AnimDelegateTest2, int32, int32)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAnimDelegateTest3);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttackHitEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDeadEvent);
 
 UCLASS()
 class UNREALSTUDY_API UMyAnimInstance : public UAnimInstance
@@ -40,6 +41,8 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_Attack_Hit();
+	UFUNCTION()
+	void AnimNotify_Dead();
 
 	void JumpToSection(int32 sectionIndex);
 
@@ -49,6 +52,7 @@ public:
 	UPROPERTY()
 	FAnimDelegateTest3 _attackStart3;
 	FAttackHitEvent _hitEvent;
+	FDeadEvent _deadEvent;
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
@@ -56,6 +60,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
 	bool _isFalling = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
+	bool _isDead = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AnimMontage", meta = (AllowPrivateAccess = "true"))
 	class UAnimMontage* _animMontage;

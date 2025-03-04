@@ -23,6 +23,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		_isFalling = character->GetMovementComponent()->IsFalling();
 		_vertical = character->My_Vertical();
 		_horizontal = character->My_Horizontal();
+		_isDead = character->IsDead();
 	}
 }
 
@@ -43,7 +44,14 @@ void UMyAnimInstance::PlayAnimMontage()
 
 void UMyAnimInstance::AnimNotify_Attack_Hit()
 {
-	_hitEvent.Broadcast();
+	if (_hitEvent.IsBound())
+		_hitEvent.Broadcast();
+}
+
+void UMyAnimInstance::AnimNotify_Dead()
+{
+	if (_deadEvent.IsBound())
+		_deadEvent.Broadcast();
 }
 
 void UMyAnimInstance::JumpToSection(int32 sectionIndex)

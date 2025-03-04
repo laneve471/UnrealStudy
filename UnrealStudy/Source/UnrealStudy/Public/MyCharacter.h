@@ -27,15 +27,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void Move(const struct FInputActionValue& value);
-	UFUNCTION()
-	void Look(const struct FInputActionValue& value);
-	UFUNCTION()
-	void JumpA(const struct FInputActionValue& value);
-	UFUNCTION()
-	void Attack(const struct FInputActionValue& value);
-
-	UFUNCTION()
 	void TestDelegate();
 	UFUNCTION()
 	int32 TestDelegate2(int32 a, int32 b);
@@ -45,6 +36,8 @@ public:
 
 	UFUNCTION()
 	void Attack_Hit();
+	UFUNCTION()
+	void DeadEvent();
 
 	void AddHp(float Amount);
 	void SubtractHp(float Amount);
@@ -52,22 +45,12 @@ public:
 	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	// 실제 나에게 적용된 데미지 반환
 
+	bool IsDead();
+
 	float My_Vertical() { return _vertical; }
 	float My_Horizontal() { return _horizontal; }
 
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	class UInputAction* _moveAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	class UInputAction* _lookAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	class UInputAction* _jumpAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	class UInputAction* _attackAction;
-
+protected:
 	// 언리얼의 핵심 구조
 	// 1. 상속
 	// 2. 컴포넌트 패턴
@@ -83,20 +66,11 @@ private:
 	//		- 눈에 보이는 무언가 (카메라, 광원, 모델)
 	//		- 다른 컴포넌트에 붙을 수 있음 (부모가 움직이면 자식도 움직임)
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* _camera; // 액터에만 붙을 수 있음
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* _springArm;
-
 	UPROPERTY()
 	class UMyAnimInstance* _animInstance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
 	class UMyStatComponent* _statComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
-	class UWidgetComponent* _hpBarWidget;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	bool _isAttack;

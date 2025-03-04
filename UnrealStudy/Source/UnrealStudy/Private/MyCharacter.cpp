@@ -4,19 +4,12 @@
 #include "MyCharacter.h"
 
 #include "Kismet/KismetMathLibrary.h"
-#include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "InputActionValue.h"
-
 #include "Components/CapsuleComponent.h"
-#include "Components/WidgetComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
 
 #include "MyAnimInstance.h"
 #include "MyStatComponent.h"
 #include "MyItem.h"
-#include "MyHpBar.h"
+#include "MyPlayerController.h"
 
 #include "Engine/DamageEvents.h"
 
@@ -29,26 +22,8 @@ AMyCharacter::AMyCharacter()
 	// bluePrint에서 SkeletalMesh
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
-	_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-
-	// 상속관계 설정
-	_springArm->SetupAttachment(GetCapsuleComponent());
-	_camera->SetupAttachment(_springArm);
-
-	_springArm->TargetArmLength = 500.0f;
-	_springArm->SetRelativeRotation(FRotator(-35.0f, 0.0f, 0.0f));
-
 	_statComponent = CreateDefaultSubobject<UMyStatComponent>(TEXT("Stat"));
-	_hpBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
-	_hpBarWidget->SetupAttachment(GetMesh());
-	_hpBarWidget->SetWidgetSpace(EWidgetSpace::World);
 	
-	static ConstructorHelpers::FClassFinder<UMyHpBar> hpBarClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/BluePrints/BP_MyHpBar.BP_MyHpBar_C'"));
-	if (hpBarClass.Succeeded())
-	{
-		_hpBarWidget->SetWidgetClass(hpBarClass.Class);
-	}
 }
 
 // Called when the game starts or when spawned
@@ -67,13 +42,7 @@ void AMyCharacter::BeginPlay()
 
 	_animInstance->OnMontageEnded.AddDynamic(this, &AMyCharacter::AttackEnd);
 	_animInstance->_hitEvent.AddDynamic(this, &AMyCharacter::Attack_Hit);
-
-	// HpBar...ProgressBar...Percent 변경될 때 호출되는 함수
-	auto hpBar = Cast<UMyHpBar>(_hpBarWidget->GetWidget());
-	if (hpBar)
-	{
-		_statComponent->_hpChanged.AddUObject(hpBar, &UMyHpBar::SetHpBarValue);
-	}
+	_animInstance->_deadEvent.AddDynamic(this, &AMyCharacter::DeadEvent);
 }
 
 // Called every frame
@@ -81,15 +50,6 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto playerCameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
-
-	if (playerCameraManager)
-	{
-		FVector hpBarLocation = _hpBarWidget->GetComponentLocation();
-		FVector cameraLocation = playerCameraManager->GetCameraLocation();
-		FRotator rot = UKismetMathLibrary::FindLookAtRotation(hpBarLocation, cameraLocation);
-		_hpBarWidget->SetWorldRotation(rot);
-	}
 }
 
 // Called to bind functionality to input
@@ -97,77 +57,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-	if (enhancedInputComponent)
-	{
-		enhancedInputComponent->BindAction(_moveAction, ETriggerEvent::Triggered, this, &AMyCharacter::Move);
-		enhancedInputComponent->BindAction(_lookAction, ETriggerEvent::Triggered, this, &AMyCharacter::Look);
-		enhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Triggered, this, &AMyCharacter::JumpA);
-		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &AMyCharacter::Attack);
-	}
 }
-
-void AMyCharacter::Move(const FInputActionValue& value)
-{
-	if (_isAttack) return;
-
-	FVector2D moveVector = value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		if (moveVector.Length() > 0.01f)
-		{
-			FVector forward = GetActorForwardVector();
-			FVector right = GetActorRightVector();
-
-			_vertical = moveVector.Y;
-			_horizontal = moveVector.X;
-
-			AddMovementInput(forward, moveVector.Y * _statComponent->GetSpeed());
-			AddMovementInput(right, moveVector.X * _statComponent->GetSpeed());
-		}
-	}
-}
-
-void AMyCharacter::Look(const FInputActionValue& value)
-{
-	FVector2D lookAxisVector = value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		AddControllerYawInput(lookAxisVector.X);
-		AddControllerPitchInput(-lookAxisVector.Y);
-	}
-}
-
-void AMyCharacter::JumpA(const FInputActionValue& value)
-{
-	if (_isAttack) return;
-
-	bool isPress = value.Get<bool>();
-
-	if (isPress)
-	{
-		ACharacter::Jump();
-	}
-}
-
-void AMyCharacter::Attack(const FInputActionValue& value)
-{
-	if (_isAttack) return;
-
-	bool isPress = value.Get<bool>();
-
-	if (isPress)
-	{
-		_isAttack = true;
-
-		_curAttackSection = (_curAttackSection + 1) % 3;
-		_animInstance->PlayAnimMontage();
-		_animInstance->JumpToSection(_curAttackSection + 1);
-	}
-}
-
 
 void AMyCharacter::TestDelegate()
 {
@@ -232,6 +122,12 @@ void AMyCharacter::Attack_Hit()
 		attackRange * 0.5f, attackRadius, quat, drawColor, false, 1.0f);
 }
 
+void AMyCharacter::DeadEvent()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+}
+
 void AMyCharacter::AddHp(float Amount)
 {
 	_statComponent->AddCurHp(Amount);
@@ -246,5 +142,20 @@ float AMyCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 {
 	_statComponent->AddCurHp(-Damage);
 
+	auto attackerController = Cast<AMyPlayerController>(EventInstigator);
+
+	if (attackerController)
+	{
+		if (IsDead())
+		{
+			UE_LOG(LogTemp, Error, TEXT("Be Dead by Player"));
+		}
+	}
+
 	return Damage;
+}
+
+bool AMyCharacter::IsDead()
+{
+	return _statComponent->IsDead();
 }
