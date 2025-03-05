@@ -6,7 +6,6 @@
 #include "MyCharacter.h"
 #include "MyPlayer.h"
 #include "MyPlayerController.h"
-#include "Engine/DamageEvents.h"
 
 // Sets default values
 AMyItem::AMyItem()

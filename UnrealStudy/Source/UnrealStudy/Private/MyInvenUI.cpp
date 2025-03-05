@@ -23,6 +23,13 @@ void UMyInvenUI::NativeConstruct()
 
 	UE_LOG(LogTemp, Error, TEXT("Image Size : %d"), _slotImages.Num());
 
-	auto item = LoadObject<UTexture2D>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Graphics/UI/Items/Tex_seeds_06_b.Tex_seeds_06_b'"));
-	_slotImages[0]->SetBrushFromTexture(item);
+	_potionTexture = LoadObject<UTexture2D>(nullptr, TEXT("/Script/Engine.Texture2D'/Game/Graphics/UI/Items/Tex_seeds_06_b.Tex_seeds_06_b'"));
+
+	_slotImages[0]->SetBrushFromTexture(_potionTexture);
+}
+
+void UMyInvenUI::SetItem_Index(int32 index, FMyItemInfo info)
+{
+	if (info.itemId == 1 && info.type == MyItemType::POTION)
+		_slotImages[index]->SetBrushFromTexture(_potionTexture);
 }

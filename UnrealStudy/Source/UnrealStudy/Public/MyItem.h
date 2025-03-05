@@ -6,6 +6,25 @@
 #include "GameFramework/Actor.h"
 #include "MyItem.generated.h"
 
+UENUM()
+enum class MyItemType
+{
+	NONE,
+	POTION
+};
+
+USTRUCT(BluePrintType)
+struct FMyItemInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 itemId = -1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	MyItemType type = MyItemType::NONE;
+};
+
 UCLASS()
 class UNREALSTUDY_API AMyItem : public AActor
 {
@@ -28,10 +47,15 @@ public:
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
+	const FMyItemInfo& GetInfo() { return _info; }
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* _mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Collision", meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* _collider;
+
+	UPROPERTY(EditAnywhere, Category = "ItemInfo")
+	FMyItemInfo _info;
 };

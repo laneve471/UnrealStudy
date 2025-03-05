@@ -280,6 +280,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyHpBar.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyInvenComponent.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyInvenUI.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -307,6 +310,7 @@
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyGameInstance.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyGameModeBase.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyHpBar.h"/>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyInvenComponent.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyInvenUI.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyItem.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayer.h"/>
