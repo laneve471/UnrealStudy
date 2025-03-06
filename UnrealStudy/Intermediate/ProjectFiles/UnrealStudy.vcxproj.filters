@@ -45,6 +45,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyAnimInstance.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyButton.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyCharacter.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
@@ -88,6 +91,9 @@
       <UniqueIdentifier>{0989A769-3405-34B6-B854-D16F381EF938}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyAnimInstance.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyButton.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyCharacter.h">

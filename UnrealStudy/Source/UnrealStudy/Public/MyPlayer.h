@@ -39,8 +39,13 @@ public:
 	void JumpA(const struct FInputActionValue& value);
 	UFUNCTION()
 	void Attack(const struct FInputActionValue& value);
+	UFUNCTION()
+	void InvenOnOff(const struct FInputActionValue& value);
 
 	void AddItem(class AMyItem* item);
+
+	UFUNCTION()
+	void DropItem();
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
@@ -55,6 +60,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	class UInputAction* _attackAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	class UInputAction* _invenAction;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* _camera;
@@ -68,4 +76,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UMyInvenComponent* _invenComponent;
+
+	bool _isInvenOpen = false;
 };

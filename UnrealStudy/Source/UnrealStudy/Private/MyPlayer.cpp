@@ -11,13 +11,15 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
+#include "MyPlayerController.h"
 #include "MyAnimInstance.h"
 #include "MyStatComponent.h"
-#include "MyItem.h"
 
 #include "Blueprint/Userwidget.h"
-#include "MyInvenUI.h"
+#include "Components/Button.h"
 #include "MyInvenComponent.h"
+#include "MyInvenUI.h"
+#include "MyItem.h"
 
 AMyPlayer::AMyPlayer()
 {
@@ -48,17 +50,16 @@ void AMyPlayer::PostInitializeComponents()
 
 	auto invenUI = Cast<UMyInvenUI>(_invenWidget);
 	if (invenUI)
+	{
 		_invenComponent->itemAddEvent.AddUObject(invenUI, &UMyInvenUI::SetItem_Index);
+		invenUI->Drop->OnClicked.AddDynamic(this, &AMyPlayer::DropItem);
+	}
 }
 
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (_invenWidget)
-	{
-		_invenWidget->AddToViewport();
-	}
 }
 
 void AMyPlayer::Tick(float DeltaTime)
@@ -78,6 +79,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 		enhancedInputComponent->BindAction(_lookAction, ETriggerEvent::Triggered, this, &AMyPlayer::Look);
 		enhancedInputComponent->BindAction(_jumpAction, ETriggerEvent::Triggered, this, &AMyPlayer::JumpA);
 		enhancedInputComponent->BindAction(_attackAction, ETriggerEvent::Triggered, this, &AMyPlayer::Attack);
+		enhancedInputComponent->BindAction(_invenAction, ETriggerEvent::Started, this, &AMyPlayer::InvenOnOff);
 	}
 }
 
@@ -142,6 +144,31 @@ void AMyPlayer::Attack(const FInputActionValue& value)
 	}
 }
 
+void AMyPlayer::InvenOnOff(const FInputActionValue& value)
+{
+	bool isPress = value.Get<bool>();
+
+	if (isPress)
+	{
+		auto controller = Cast<AMyPlayerController>(GetController());
+
+		if (_isInvenOpen)
+		{
+			if (controller)
+				controller->HideUI();
+			_invenWidget->RemoveFromViewport();
+		}
+		else
+		{
+			if (controller)
+				controller->ShowUI();
+			_invenWidget->AddToViewport();
+		}
+
+		_isInvenOpen = !_isInvenOpen;
+	}
+}
+
 void AMyPlayer::AddItem(AMyItem* item)
 {
 	// TODO
@@ -150,4 +177,9 @@ void AMyPlayer::AddItem(AMyItem* item)
 		auto info = item->GetInfo();
 		_invenComponent->AddItem(info.itemId, info.type);
 	}
+}
+
+void AMyPlayer::DropItem()
+{
+	UE_LOG(LogTemp, Error, TEXT("Drop"));
 }
