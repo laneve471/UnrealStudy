@@ -8,6 +8,7 @@
 #include "MyInvenComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FItemAdd, int32, FMyItemInfo);
+DECLARE_MULTICAST_DELEGATE_OneParam(FItemDrop, int32);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNREALSTUDY_API UMyInvenComponent : public UActorComponent
@@ -26,14 +27,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AddItem(int32 itemID, MyItemType type);
-	FMyItemInfo DropItem();
-	FMyItemInfo DropItem(int32 index);
+	FMyItemInfo GetItemInfo_Index(int32 index);
+
+	void AddItem(AMyItem* item);
+	AMyItem* DropItem();
+	AMyItem* DropItem(int32 index);
 
 	FItemAdd itemAddEvent;
+	FItemDrop itemDropEvent;
 
 private:
 	// TODO : itemComponent
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	TArray<FMyItemInfo> _items;
+	TArray<AMyItem*> _items;
 };

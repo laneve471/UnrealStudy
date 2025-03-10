@@ -32,42 +32,62 @@ void UMyInvenComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-void UMyInvenComponent::AddItem(int32 itemID, MyItemType type)
+FMyItemInfo UMyInvenComponent::GetItemInfo_Index(int32 index)
 {
-	FMyItemInfo newItemInfo;
-	newItemInfo.itemId = itemID;
-	newItemInfo.type = type;
+	if (index < 0 || index >= _items.Num())
+		return FMyItemInfo();
 
-	FMyItemInfo temp;
-	auto target = _items.FindByPredicate([temp](FMyItemInfo info)->bool
+	if (_items[index] == nullptr)
+		return FMyItemInfo();
+
+	return _items[index]->GetInfo();
+}
+
+void UMyInvenComponent::AddItem(AMyItem* item)
+{
+	auto target = _items.IndexOfByPredicate([](AMyItem* item)->bool
 		{
-			if (info.itemId == temp.itemId && info.type == temp.type)
+			if (item == nullptr)
 				return true;
 			return false;
 		});
 	
-	if (target == nullptr)
+	if (target == INDEX_NONE)
 		return;
 
-	*target = newItemInfo;
+	_items[target] = item;
 
-	int32 targetIndex = 0;
-	int64 temp1 = (int64)target;
-	int64 temp2 = (int64)(&_items[0]);
-	targetIndex = (temp1 - temp2) / sizeof(int64);
-
-	itemAddEvent.Broadcast(targetIndex, *target);
-
-	UE_LOG(LogTemp, Error, TEXT("ID : %d"), newItemInfo.itemId);
+	if (itemAddEvent.IsBound())
+		itemAddEvent.Broadcast(target, item->GetInfo());
+	// Info를 주는 이유 -> UI 세팅
 }
 
-FMyItemInfo UMyInvenComponent::DropItem()
+AMyItem* UMyInvenComponent::DropItem()
 {
-	return FMyItemInfo();
+	return nullptr;
 }
 
-FMyItemInfo UMyInvenComponent::DropItem(int32 index)
+AMyItem* UMyInvenComponent::DropItem(int32 index)
 {
-	return FMyItemInfo();
+
+	FMyItemInfo noneInfo;
+
+	if (index >= _items.Num() || index < 0)
+		return nullptr;
+
+	if (_items[index] == nullptr)
+		return nullptr;
+
+	AMyItem* dropItem = _items[index];
+	_items[index] = nullptr;
+	//GetOwner() -> Player
+	// => Cast<MyPlayer>
+	// => Drop함수 호출
+	// player->DropItem(dropItem)
+
+	// ItemDropEvent
+	// => MyPlayer의 Drop함수를 바인딩해서 간접호출
+
+	return dropItem;
 }
 

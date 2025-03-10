@@ -21,6 +21,9 @@ public:
 
 	void SetItem_Index(int32 index, FMyItemInfo info);
 
+	UFUNCTION()
+	void SetTextBox();
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UUniformGridPanel* Grid;
@@ -28,11 +31,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	class UButton* Drop;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* ItemInfo;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class UImage*> _slotImages;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class UButton*> _slotButtons;
+
+
+	UPROPERTY()
+	class UMyInvenComponent* _invenComponent;
+
 
 	int32 _curIndex = -1;
 

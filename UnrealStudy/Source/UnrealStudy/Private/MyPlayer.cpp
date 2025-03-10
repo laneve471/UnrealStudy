@@ -53,6 +53,7 @@ void AMyPlayer::PostInitializeComponents()
 	{
 		_invenComponent->itemAddEvent.AddUObject(invenUI, &UMyInvenUI::SetItem_Index);
 		invenUI->Drop->OnClicked.AddDynamic(this, &AMyPlayer::DropItem);
+		invenUI->_invenComponent = _invenComponent;
 	}
 }
 
@@ -174,12 +175,33 @@ void AMyPlayer::AddItem(AMyItem* item)
 	// TODO
 	if (item && _invenComponent)
 	{
-		auto info = item->GetInfo();
-		_invenComponent->AddItem(info.itemId, info.type);
+		_invenComponent->AddItem(item);
 	}
 }
 
 void AMyPlayer::DropItem()
 {
 	UE_LOG(LogTemp, Error, TEXT("Drop"));
+
+	int32 curDropIndex = -1;
+	auto invenUI = Cast<UMyInvenUI>(_invenWidget);
+	if (invenUI)
+		curDropIndex = invenUI->_curIndex;
+
+	auto item = _invenComponent->DropItem(curDropIndex);
+	if (item == nullptr)
+		return;
+
+	invenUI->SetItem_Index(curDropIndex, FMyItemInfo());
+
+	FVector playerLocation = GetActorLocation();
+
+	float dropRadius = 200.0f;
+	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
+	FVector dropLocation = playerLocation + randomOffset;
+	dropLocation.Z = 40.0f;
+
+	item->SetActorLocation(dropLocation);
+	item->SetActorHiddenInGame(false);
+	item->SetActorEnableCollision(true);
 }

@@ -23,6 +23,9 @@ struct FMyItemInfo
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	MyItemType type = MyItemType::NONE;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	AMyItem* _item;
 };
 
 UCLASS()

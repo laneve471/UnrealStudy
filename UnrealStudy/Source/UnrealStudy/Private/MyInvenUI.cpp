@@ -6,8 +6,10 @@
 #include "Components/UniformGridPanel.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Components/TextBlock.h"
 
 #include "MyButton.h"
+#include "MyInvenComponent.h"
 
 bool UMyInvenUI::Initialize()
 {
@@ -23,6 +25,7 @@ bool UMyInvenUI::Initialize()
 		if (button)
 		{
 			button->OnClicked.AddDynamic(button, &UMyButton::SetCurIndex);
+			button->OnClicked.AddDynamic(this, &UMyInvenUI::SetTextBox);
 			button->widget = this;
 			button->_buttonIndex = index;
 			index++;
@@ -45,6 +48,26 @@ bool UMyInvenUI::Initialize()
 
 void UMyInvenUI::SetItem_Index(int32 index, FMyItemInfo info)
 {
+	if (info.itemId == -1 && info.type == MyItemType::NONE)
+		_slotImages[index]->SetBrushFromTexture(_defaultTexture);
+
 	if (info.itemId == 1 && info.type == MyItemType::POTION)
 		_slotImages[index]->SetBrushFromTexture(_potionTexture);
+}
+
+void UMyInvenUI::SetTextBox()
+{
+	if (_invenComponent == nullptr)
+		return;
+
+	auto info = _invenComponent->GetItemInfo_Index(_curIndex);
+
+	if (info.itemId == -1 && info.type == MyItemType::NONE)
+	{
+		ItemInfo->SetText(FText::FromString(TEXT("ItemType : NONE \n ItemID : -1")));
+	}
+	if (info.itemId == 1 && info.type == MyItemType::POTION)
+	{
+		ItemInfo->SetText(FText::FromString(TEXT("ItemType : POTION \n ItemID : 1")));
+	}
 }
