@@ -46,9 +46,11 @@ public:
 	// 실제 나에게 적용된 데미지 반환
 
 	bool IsDead();
+	bool IsAttack() { return _isAttack; }
 
 	float My_Vertical() { return _vertical; }
 	float My_Horizontal() { return _horizontal; }
+	float GetAttackRange() { return _attackRange; }
 
 protected:
 	// 언리얼의 핵심 구조
@@ -79,6 +81,9 @@ protected:
 
 	float _vertical = 0.0f;
 	float _horizontal = 0.0f;
+
+	UPROPERTY(EditAnywhere)
+	float _attackRange = 1000.f;
 };
 
 // 액터 : mesh, material, transform

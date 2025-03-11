@@ -5,9 +5,11 @@
 
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/WidgetComponent.h"
+#include "Animation/AnimInstance.h"
 
 #include "MyHpBar.h"
 #include "MyStatComponent.h"
+#include "MyAnimInstance.h"
 
 AMyEnemy::AMyEnemy()
 {
@@ -49,4 +51,15 @@ void AMyEnemy::Tick(float DeltaTime)
 		FRotator rot = UKismetMathLibrary::FindLookAtRotation(hpBarLocation, cameraLocation);
 		_hpBarWidget->SetWorldRotation(rot);
 	}
+}
+
+void AMyEnemy::Attack_AI()
+{
+	if (_isAttack) return;
+
+	_isAttack = true;
+
+	_curAttackSection = (_curAttackSection + 1) % 3;
+	_animInstance->PlayAnimMontage();
+	_animInstance->JumpToSection(_curAttackSection + 1);
 }

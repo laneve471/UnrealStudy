@@ -81,16 +81,15 @@ void AMyCharacter::Attack_Hit()
 	FHitResult hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 
-	float attackRange = 500.0f;
 	float attackRadius = 100.0f;
 	//FQuat quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(90));
 
 	FVector forward = GetActorForwardVector();
 	FQuat quat = FQuat::FindBetweenVectors(FVector(0, 0, 1), forward);
 
-	FVector center = GetActorLocation() + forward * attackRange * 0.5f;
+	FVector center = GetActorLocation() + forward * _attackRange * 0.5f;
 	FVector start = GetActorLocation();  // 충돌체의 중심 start
-	FVector end = GetActorLocation() + forward * attackRange; // 충돌체의 중심 end
+	FVector end = GetActorLocation() + forward * _attackRange; // 충돌체의 중심 end
 
 	bool bResult = GetWorld()->SweepSingleByChannel
 	( // Sweep : start부터 end까지 물고 가는 형태의 충돌 판정
@@ -99,7 +98,7 @@ void AMyCharacter::Attack_Hit()
 		center,
 		quat,
 		ECC_GameTraceChannel2,
-		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
+		FCollisionShape::MakeCapsule(attackRadius, _attackRange * 0.5f),
 		params
 	);
 
@@ -119,13 +118,14 @@ void AMyCharacter::Attack_Hit()
 	}
 
 	DrawDebugCapsule(GetWorld(), center,
-		attackRange * 0.5f, attackRadius, quat, drawColor, false, 1.0f);
+		_attackRange * 0.5f, attackRadius, quat, drawColor, false, 1.0f);
 }
 
 void AMyCharacter::DeadEvent()
 {
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
+	Controller->UnPossess();
 }
 
 void AMyCharacter::AddHp(float Amount)

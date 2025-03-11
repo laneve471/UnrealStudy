@@ -253,6 +253,7 @@
     <None Include="..\..\Source\UnrealStudy.Target.cs"/>
     <None Include="..\..\Source\UnrealStudyEditor.Target.cs"/>
     <None Include="..\..\.vsconfig"/>
+    <None Include="..\..\Study.txt"/>
     <None Include="..\..\Config\DefaultEditor.ini"/>
     <None Include="..\..\Config\DefaultEngine.ini"/>
     <None Include="..\..\Config\DefaultGame.ini"/>
@@ -262,6 +263,15 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\UnrealStudy\UnrealStudy.h"/>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\BT_Deco_CanAttack.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\BT_Service_FindTarget.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\BT_Task_Attack.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\BT_Task_FindRandomPos.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -313,6 +323,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyTutoPawn.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\BT_Deco_CanAttack.h"/>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\BT_Service_FindTarget.h"/>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\BT_Task_Attack.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\BT_Task_FindRandomPos.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyAIController.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyAnimInstance.h"/>
