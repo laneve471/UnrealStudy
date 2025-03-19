@@ -6,10 +6,12 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/CapsuleComponent.h"
 
+#include "MyGameInstance.h"
 #include "MyAnimInstance.h"
+#include "MyPlayerController.h"
 #include "MyStatComponent.h"
 #include "MyItem.h"
-#include "MyPlayerController.h"
+#include "MyEffect.h"
 
 #include "Engine/DamageEvents.h"
 
@@ -113,6 +115,8 @@ void AMyCharacter::Attack_Hit()
 		{
 			FDamageEvent damageEvent = FDamageEvent();
 
+			FVector hitPoint = hitResult.ImpactPoint;
+			EFFECT_M->PlayEffect("SparrowHit", hitPoint);
 			victim->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
 		}
 	}

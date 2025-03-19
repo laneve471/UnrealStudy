@@ -51,9 +51,16 @@ void UBT_Service_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Player")), player);
 				DrawDebugSphere(GetWorld(), pos, sphereRadius, 100, FColor::Red, false, 0.3f);
+				
+				FRotator rot = (player->GetActorLocation() - curPawn->GetActorLocation()).GetSafeNormal().Rotation();
+				curPawn->SetActorRotation(FMath::RInterpTo(curPawn->GetActorRotation(), rot, DeltaSeconds, 0.5f));
+
 				return;
 			}
 		}
+
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("Player"), nullptr);
+
 		return;
 	}
 }

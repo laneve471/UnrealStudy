@@ -12,7 +12,6 @@
       <Filter>Source</Filter>
     </None>
     <None Include="..\..\.vsconfig" />
-    <None Include="..\..\Study.txt" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -65,6 +64,12 @@
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyCharacter.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyEffect.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyEffectManager.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyEnemy.cpp">
@@ -128,6 +133,12 @@
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyCharacter.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEffect.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEffectManager.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEnemy.h">

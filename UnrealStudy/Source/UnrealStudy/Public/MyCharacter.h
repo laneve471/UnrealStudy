@@ -83,7 +83,7 @@ protected:
 	float _horizontal = 0.0f;
 
 	UPROPERTY(EditAnywhere)
-	float _attackRange = 1000.f;
+	float _attackRange = 300.f;
 };
 
 // ╬вем : mesh, material, transform

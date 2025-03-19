@@ -16,6 +16,13 @@ UMyGameInstance::UMyGameInstance()
 	}
 }
 
+void UMyGameInstance::Init()
+{
+	Super::Init();
+
+	_effectManager = GetWorld()->SpawnActor<AMyEffectManager>(FVector::ZeroVector, FRotator::ZeroRotator);
+}
+
 FMyStatData UMyGameInstance::GetStat_Level(int32 level)
 {
 	FString rowName = "Level_" + FString::FromInt(level);

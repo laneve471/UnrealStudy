@@ -28,9 +28,6 @@ EBTNodeResult::Type UBT_Task_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	if (!player->IsValidLowLevel())
 		return EBTNodeResult::Failed;
 
-	auto quat = UKismetMathLibrary::FindLookAtRotation(curPawn->GetActorLocation(), player->GetActorLocation());
-
-	curPawn->SetActorRotation(quat);
 	curPawn->Attack_AI();
 
 	return EBTNodeResult::Succeeded;
