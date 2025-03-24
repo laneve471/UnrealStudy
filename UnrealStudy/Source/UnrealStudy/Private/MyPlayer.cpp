@@ -12,6 +12,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "MyPlayerController.h"
+#include "MyGameInstance.h"
 #include "MyAnimInstance.h"
 #include "MyStatComponent.h"
 
@@ -20,6 +21,9 @@
 #include "MyInvenComponent.h"
 #include "MyInvenUI.h"
 #include "MyItem.h"
+
+#include "MyProjectile.h"
+#include "Engine/DamageEvents.h"
 
 AMyPlayer::AMyPlayer()
 {
@@ -142,6 +146,16 @@ void AMyPlayer::Attack(const FInputActionValue& value)
 		_curAttackSection = (_curAttackSection + 1) % 3;
 		_animInstance->PlayAnimMontage();
 		_animInstance->JumpToSection(_curAttackSection + 1);
+
+		if (_curAttackSection == 0 || _curAttackSection == 1)
+		{
+			FVector startPos = GetMesh()->GetSocketLocation(TEXT("arrow_anchor"));
+			FVector direction = _camera->GetForwardVector();
+
+			auto projectile = GetWorld()->SpawnActor<AMyProjectile>(_projectileClass, GetActorLocation() + GetActorForwardVector() * 100, FRotator::ZeroRotator);
+			projectile->SetOwner(this);
+			projectile->FireDirection(direction);
+		}
 	}
 }
 
@@ -168,6 +182,55 @@ void AMyPlayer::InvenOnOff(const FInputActionValue& value)
 
 		_isInvenOpen = !_isInvenOpen;
 	}
+}
+
+void AMyPlayer::Attack_Hit()
+{
+	if (IsDead()) return;
+
+	FHitResult hitResult;
+	FCollisionQueryParams params(NAME_None, false, this);
+
+	float attackRadius = 100.0f;
+	//FQuat quat = FQuat(GetActorRightVector(), FMath::DegreesToRadians(90));
+
+	FVector forward = _camera->GetForwardVector();
+	FQuat quat = FQuat::FindBetweenVectors(FVector(0, 0, 1), forward);
+
+	FVector center = GetActorLocation() + forward * _attackRange * 0.5f;
+	FVector start = GetActorLocation();  // 충돌체의 중심 start
+	FVector end = GetActorLocation() + forward * _attackRange; // 충돌체의 중심 end
+
+	bool bResult = GetWorld()->SweepSingleByChannel
+	( // Sweep : start부터 end까지 물고 가는 형태의 충돌 판정
+		OUT hitResult,
+		center,
+		center,
+		quat,
+		ECC_GameTraceChannel2,
+		FCollisionShape::MakeCapsule(attackRadius, _attackRange * 0.5f),
+		params
+	);
+	
+	FColor drawColor = FColor::Green;
+
+	if (bResult && hitResult.GetActor()->IsValidLowLevel())
+	{
+		drawColor = FColor::Red;
+		AMyCharacter* victim = Cast<AMyCharacter>(hitResult.GetActor());
+
+		if (victim)
+		{
+			FDamageEvent damageEvent = FDamageEvent();
+
+			FVector hitPoint = hitResult.ImpactPoint;
+			EFFECT_M->PlayEffect("SparrowHit", hitPoint);
+			victim->TakeDamage(_statComponent->GetAtk(), damageEvent, GetController(), this);
+		}
+	}
+
+	DrawDebugCapsule(GetWorld(), center,
+		_attackRange * 0.5f, attackRadius, quat, drawColor, false, 1.0f);
 }
 
 void AMyPlayer::AddItem(AMyItem* item)

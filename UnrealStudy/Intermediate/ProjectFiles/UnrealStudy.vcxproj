@@ -286,6 +286,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyCharacter.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyDecalActor.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyEffect.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -319,6 +322,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyPlayerController.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyProjectile.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyStatComponent.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -336,6 +342,7 @@
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyAnimInstance.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyButton.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyCharacter.h"/>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyDecalActor.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEffect.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEffectManager.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEnemy.h"/>
@@ -347,6 +354,7 @@
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyItem.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayer.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayerController.h"/>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyProjectile.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyStatComponent.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyTutoActor.h"/>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyTutoPawn.h"/>

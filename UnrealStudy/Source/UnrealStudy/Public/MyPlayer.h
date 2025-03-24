@@ -42,6 +42,8 @@ public:
 	UFUNCTION()
 	void InvenOnOff(const struct FInputActionValue& value);
 
+	virtual void Attack_Hit() override;
+
 	void AddItem(class AMyItem* item);
 
 	UFUNCTION()
@@ -76,6 +78,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	class UMyInvenComponent* _invenComponent;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AMyProjectile> _projectileClass;
 
 	bool _isInvenOpen = false;
 };

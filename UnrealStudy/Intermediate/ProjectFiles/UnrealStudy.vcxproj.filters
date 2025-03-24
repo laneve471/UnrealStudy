@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyCharacter.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyDecalActor.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyEffect.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
@@ -97,6 +100,9 @@
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyPlayerController.cpp">
+      <Filter>Source\UnrealStudy\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\UnrealStudy\Private\MyProjectile.cpp">
       <Filter>Source\UnrealStudy\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\UnrealStudy\Private\MyStatComponent.cpp">
@@ -135,6 +141,9 @@
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyCharacter.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyDecalActor.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyEffect.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
@@ -166,6 +175,9 @@
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyPlayerController.h">
+      <Filter>Source\UnrealStudy\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnrealStudy\Public\MyProjectile.h">
       <Filter>Source\UnrealStudy\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\UnrealStudy\Public\MyStatComponent.h">

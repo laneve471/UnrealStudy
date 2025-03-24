@@ -43,8 +43,8 @@ void AMyCharacter::BeginPlay()
 	_animInstance->_attackStart3.AddDynamic(this, &AMyCharacter::TestDelegate);
 
 	_animInstance->OnMontageEnded.AddDynamic(this, &AMyCharacter::AttackEnd);
-	_animInstance->_hitEvent.AddDynamic(this, &AMyCharacter::Attack_Hit);
-	_animInstance->_deadEvent.AddDynamic(this, &AMyCharacter::DeadEvent);
+	_animInstance->_hitEvent.AddUObject(this, &AMyCharacter::Attack_Hit);
+	_animInstance->_deadEvent.AddUObject(this, &AMyCharacter::DeadEvent);
 }
 
 // Called every frame
@@ -80,6 +80,8 @@ void AMyCharacter::AttackEnd(UAnimMontage* Montage, bool bInterrupted)
 
 void AMyCharacter::Attack_Hit()
 {
+	if (IsDead()) return;
+
 	FHitResult hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
 

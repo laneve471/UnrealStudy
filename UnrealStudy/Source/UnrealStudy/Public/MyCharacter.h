@@ -34,8 +34,7 @@ public:
 	UFUNCTION()
 	void AttackEnd(class UAnimMontage* Montage, bool bInterrupted);
 
-	UFUNCTION()
-	void Attack_Hit();
+	virtual void Attack_Hit();
 	UFUNCTION()
 	void DeadEvent();
 
